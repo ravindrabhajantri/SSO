@@ -1,0 +1,48 @@
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+image:
+  registry: quay.io
+  repository: keycloak/keycloak
+  tag: 23.0.6
+  digest: ""
+  pullPolicy: IfNotPresent
+
+service:
+  name: keycloak-service
+  type: NodePort
+  ports:
+    http:
+      name: keycloak-http
+      port: 8080
+      protocol: TCP
+
+keycloakConfig:
+  name: keycloak-service-config
+  data:
+    KEYCLOAK_ADMIN: admin
+    KEYCLOAK_ADMIN_PASSWORD: admin
+    KC_DB_URL_HOST: postgres
+    KC_DB_URL_DATABASE: keycloak
+    KC_DB_URL_PORT: 5432
+    KC_DB: postgres
+    KC_DB_SCHEMA: public
+    KC_DB_USERNAME: keycloak
+
+dbSecret:
+  name: keycloack-db-secret
+  data:
+    dbUserPassword: cGFzc3dvcmQ=
+
+replicaCount: 1
+container:
+  name: keycloak
+
+containerPorts:
+  http: 8080
+  https: 8443
+  infinispan: 7800
+
+httpRelativePath: "/"

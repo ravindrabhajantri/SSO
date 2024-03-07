@@ -1,0 +1,18 @@
+{{- $configName := .Values.dbConfig.name -}}
+{{- $lookupConfigMap := (lookup "v1" "ConfigMap" "default" $configName) -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.dbConfig.name }}
+  labels:
+    app: postgres
+data:
+  {{- range $k, $v := .Values.dbConfig.data }}
+    {{ $k }}: {{ $v | quote }}
+  {{- range $mk, $mv := $lookupConfigMap.data }}
+  {{ if eq $k $mk }}
+    {{ $mk }} : {{ $mv | quote }}
+  {{ end }}
+  {{- end }}
+  {{- end }}

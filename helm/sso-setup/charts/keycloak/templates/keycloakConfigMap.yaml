@@ -1,0 +1,18 @@
+{{- $configName := .Values.keycloakConfig.name -}}
+{{- $lookupConfigMap := (lookup "v1" "ConfigMap" "default" $configName) -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.keycloakConfig.name }}
+  labels:
+    app: keycloak
+data:
+    {{- range $k, $v := .Values.keycloakConfig.data }}
+      {{ $k }}: {{ $v | quote }}
+    {{- range $mk, $mv := $lookupConfigMap.data }}
+    {{ if eq $k $mk }}
+      {{ $mk }}: {{ $mv | quote }}
+    {{ end }}
+    {{- end }}
+    {{- end }}
