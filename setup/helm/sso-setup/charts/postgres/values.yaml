@@ -1,0 +1,34 @@
+image:
+  registry: docker.io
+  repository: postgres
+  tag: 15.5-alpine3.19
+  pullPolicy: IfNotPresent
+
+service:
+  name: postgres-service
+  type: NodePort
+  ports:
+    http:
+      name: postgres-http
+      port: 5432
+      protocol: TCP
+
+dbConfig:
+  name: postgres-db-config
+  data:
+    db-name: keycloak
+    db-user-name: keycloak
+
+dbSecret:
+  name: postgres-db-secret
+  data:
+    dbUserPassword: cGFzc3dvcmQ=
+
+replicaCount: 1
+container:
+  name: postgres
+
+containerPorts:
+  http: 5432
+
+httpRelativePath: "/"
