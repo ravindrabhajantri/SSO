@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: {{ .Values.container.name }}
+          image: {{ printf "%s/%s:%s" .Values.image.registry .Values.image.repository .Values.image.tag }}
+          imagePullPolicy: {{ default "IfNotPresent" .Values.image.pullPolicy }}
+          command: ["/opt/keycloak/bin/kc.sh"]
+          args: ["start-dev"]
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.keycloakConfig.name }}
+            - secretRef:
+                name: {{ .Values.dbSecret.name }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPorts.http }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.httpRelativePath }}
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+            successThreshold: 1
+
