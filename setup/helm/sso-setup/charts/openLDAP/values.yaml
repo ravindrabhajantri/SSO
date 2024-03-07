@@ -1,0 +1,45 @@
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+label:
+  name: openldap
+
+image:
+  registry: docker.io
+  repository: bitnami/openldap
+  tag: 2.5.17-debian-12-r0
+  digest: ""
+  pullPolicy: IfNotPresent
+
+service:
+  name: openldap-service
+  type: NodePort
+  ports:
+    http:
+      name: openldap-http
+      port: 1389
+      protocol: TCP
+
+openldapConfig:
+  name: openldap-service-config
+  data:
+    LDAP_ADMIN_USERNAME: admin
+    LDAP_USERS: user01
+
+openldapsecret:
+  name: openldap-db-secret
+  data:
+    ldapAdminPassword: YWRtaW5wYXNzd29yZA==
+    user01password: cGFzc3dvcmQx
+
+replicaCount: 1
+container:
+  name: openldap
+
+containerPorts:
+  http: 1389
+  https: 1636
+
+httpRelativePath: "/"

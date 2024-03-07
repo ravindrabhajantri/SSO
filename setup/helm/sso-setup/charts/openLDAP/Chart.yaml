@@ -1,0 +1,8 @@
+apiVersion: v2
+name: openldap
+version: 1.0
+
+dependencies:
+  - name: keycloak
+    version: "1.0"
+    repository: "file://../keycloak"
