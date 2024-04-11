@@ -8,8 +8,8 @@ label:
 
 image:
   registry: docker.io
-  repository: bitnami/openldap
-  tag: 2.5.17-debian-12-r0
+  repository: osixia/openldap
+  tag: 1.2.3
   digest: ""
   pullPolicy: IfNotPresent
 
@@ -19,14 +19,16 @@ service:
   ports:
     http:
       name: openldap-http
-      port: 1389
+      port: 389
       protocol: TCP
 
 openldapConfig:
   name: openldap-service-config
   data:
     LDAP_ADMIN_USERNAME: admin
-    LDAP_USERS: user01
+    LDAP_ORGANISATION: "HDFC Bank."
+    LDAP_DOMAIN: "hdfcbank.com"
+    LDAP_BASE_DN: "dc=hdfcbank,dc=com"
 
 openldapsecret:
   name: openldap-db-secret
@@ -39,7 +41,7 @@ container:
   name: openldap
 
 containerPorts:
-  http: 1389
-  https: 1636
+  http: 389
+  https: 636
 
 httpRelativePath: "/"
