@@ -4,9 +4,9 @@ global:
   storageClass: ""
 
 image:
-  registry: quay.io
+  registry: docker.io
   repository: keycloak/keycloak
-  tag: 23.0.6
+  tag: 24.0.2
   digest: ""
   pullPolicy: IfNotPresent
 
