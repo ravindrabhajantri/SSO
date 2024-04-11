@@ -1,0 +1,39 @@
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+label:
+  name: phpldapadmin
+
+image:
+  registry: docker.io
+  repository: osixia/phpldapadmin
+  tag: 0.9.0
+  digest: ""
+  pullPolicy: IfNotPresent
+
+service:
+  name: phpldapadmin-service
+  type: NodePort
+  ports:
+    http:
+      name: phpldapadmin-http
+      port: 80
+      protocol: TCP
+
+phpldapadminConfig:
+  name: phpldapadmin-config
+  data:
+    PHPLDAPADMIN_LDAP_HOSTS: openldap
+    PHPLDAPADMIN_HTTPS: false
+
+replicaCount: 1
+container:
+  name: phpldapadmin
+
+containerPorts:
+  http: 443
+
+
+httpRelativePath: "/"

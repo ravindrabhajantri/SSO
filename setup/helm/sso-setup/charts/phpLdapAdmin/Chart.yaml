@@ -1,0 +1,8 @@
+apiVersion: v2
+name: phpLdapAdmin
+version: 1.0
+
+dependencies:
+  - name: openLDAP
+    version: "1.0"
+    repository: "file://../openLDAP"
