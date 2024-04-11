@@ -6,26 +6,35 @@ networks:
 
 services: 
   keycloak: 
-    image: "quay.io/keycloak/keycloak:23.0.6"
+    image: "docker.io/keycloak/keycloak:24.0.2"
     container_name: keycloak
     ports: 
       - "18443:8443"
       - "18080:8080"
     environment: 
+    #  KEYCLOAK_IMPORT: "/opt/keycloak/realm-import-nac.json -Dkeycloak.profile.feature.upload_scripts=enabled"
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      #KKC_METRICS_ENABLED: false
+      #KKC_HEALTH_ENABLED: false
       KC_DB: postgres
       KC_DB_SCHEMA: public
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: password
+      #KC_DB_URL_HOST: postgres 
+      #KC_DB_URL_DATABASE: keycloak
+      #KC_DB_URL_PORT: 5432
       KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak  #this configuration or above 3 combined can be used to connect to postgres
+      #KC_LOG_LEVEL: DEBUG
     restart: on-failure
     command: ["start-dev"]
+    #volumes: 
+    #  - "./keycloak-data:/opt/keycloak"  #first get /opt/keycloak data and customize to use like this as ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
     depends_on:
       - postgres
       
   postgres: 
-    image: postgres:15.5-alpine3.19
+    image: "docker.io/library/postgres:16.2"
     container_name: postgres    
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
@@ -35,19 +44,33 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "15432:5432"
+    #networks:
+    #    - backend
 
   openldap: 
-    image: bitnami/openldap:2.5.17-debian-12-r0
+    image: osixia/openldap:1.2.3 
     container_name: openldap    
     volumes:
       - ./openldap_data:/bitnami/openldap
     ports:
-      - "1389:1389"
-      - "1636:1636"
+      - "1389:389"
+      - "1636:636"
     environment:
-      - LDAP_ADMIN_USERNAME=admin
-      - LDAP_ADMIN_PASSWORD=adminpassword
-      - LDAP_USERS=user01,user02
-      - LDAP_PASSWORDS=password1,password2
-
+      LDAP_ADMIN_USERNAME: admin
+      LDAP_ADMIN_PASSWORD: adminpassword
+      LDAP_ORGANISATION: "HDFC Bank."
+      LDAP_DOMAIN: "hdfcbank.com"
+      LDAP_BASE_DN: "dc=hdfcbank,dc=com"
+    #networks:
+    #    - backend
+  phpldapadmin:
+    image: osixia/phpldapadmin:0.9.0
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8080:80"
+    depends_on:
+      - openldap
 #add log ELK and Monitoring
