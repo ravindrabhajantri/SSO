@@ -1,3 +1,4 @@
+<h1>ISTO Setup </h1>h1>
 run sso setup helm
 run istio-setup script
 
@@ -26,6 +27,27 @@ https://github.com/shehbaz-pathan/istio-keycloak for authorization policy relate
 https://istio.io/latest/docs/tasks/observability/kiali/  visualizing through Kiali
  
  
- 
- keycloak: cn=admin,dc=example,dc=org 
- ldap://openldap:1389
+ <h1>Postgres</h1>
+ How to check the postgres for keycloak tables
+
+docker exec -it postgres bash
+
+Connect: 
+psql -h localhost -U keycloak
+List of databases: 
+\l
+Connect to keycload DB
+\c keycloak
+Show tables
+\dt
+
+<h1>Keycloak</h1>
+Connection URL	ldap://openldap:389
+bind dn         cn=admin,dc=hdfcbank,dc=com 
+Users DN	    dc=hdfcbank,dc=com
+
+
+<h1>phpldapadmin</h1>
+Access from web  http://localhost:8080/
+login dn   cn=admin,dc=hdfcbank,dc=com
+password   adminpassword
