@@ -1,7 +1,7 @@
 image:
   registry: docker.io
-  repository: postgres
-  tag: 15.5-alpine3.19
+  repository: library/postgres
+  tag: "16.2"
   pullPolicy: IfNotPresent
 
 service:
