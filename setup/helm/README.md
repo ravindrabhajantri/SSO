@@ -28,26 +28,26 @@ https://istio.io/latest/docs/tasks/observability/kiali/  visualizing through Kia
  
  
  <h1>Postgres</h1>
- How to check the postgres for keycloak tables
+ <p>How to check the postgres for keycloak tables<br>
+ docker exec -it postgres bash<br>
+ Connect: <br>
+ psql -h localhost -U keycloak<br>
+ List of databases: <br>
+ \l<br>
+ Connect to keycload DB:<br>
+ \c keycloak<br>
+ Show tables:<br>
+ \dt<br>
+ </p> 
 
-docker exec -it postgres bash
-
-Connect: 
-psql -h localhost -U keycloak
-List of databases: 
-\l
-Connect to keycload DB
-\c keycloak
-Show tables
-\dt
-
+ 
 <h1>Keycloak</h1>
-Connection URL	ldap://openldap:389
-bind dn         cn=admin,dc=hdfcbank,dc=com 
-Users DN	    dc=hdfcbank,dc=com
-
+<p>Connection URL	ldap://openldap:3891<br>
+bind dn         cn=admin,dc=hdfcbank,dc=com<br>
+Users DN	    dc=hdfcbank,dc=com<br>
+</p>
 
 <h1>phpldapadmin</h1>
-Access from web  http://localhost:8080/
-login dn   cn=admin,dc=hdfcbank,dc=com
-password   adminpassword
+Access from web:  http://localhost:8080/<br>
+login dn:   cn=admin,dc=hdfcbank,dc=com<br>
+password:   adminpassword<br>
